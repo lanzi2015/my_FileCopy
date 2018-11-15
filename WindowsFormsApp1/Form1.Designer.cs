@@ -28,13 +28,157 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.ser_name = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.t_name = new System.Windows.Forms.TextBox();
+            this.u_name = new System.Windows.Forms.TextBox();
+            this.password = new System.Windows.Forms.TextBox();
+            this.ip = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // ser_name
+            // 
+            this.ser_name.Location = new System.Drawing.Point(111, 32);
+            this.ser_name.Name = "ser_name";
+            this.ser_name.Size = new System.Drawing.Size(129, 21);
+            this.ser_name.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(42, 239);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(104, 41);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "样例";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(185, 239);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(104, 41);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "连接数据源";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // t_name
+            // 
+            this.t_name.Location = new System.Drawing.Point(111, 70);
+            this.t_name.Name = "t_name";
+            this.t_name.Size = new System.Drawing.Size(129, 21);
+            this.t_name.TabIndex = 3;
+            // 
+            // u_name
+            // 
+            this.u_name.Location = new System.Drawing.Point(111, 107);
+            this.u_name.Name = "u_name";
+            this.u_name.Size = new System.Drawing.Size(129, 21);
+            this.u_name.TabIndex = 4;
+            // 
+            // password
+            // 
+            this.password.Location = new System.Drawing.Point(111, 146);
+            this.password.Name = "password";
+            this.password.Size = new System.Drawing.Size(129, 21);
+            this.password.TabIndex = 5;
+            // 
+            // ip
+            // 
+            this.ip.Location = new System.Drawing.Point(111, 189);
+            this.ip.Name = "ip";
+            this.ip.Size = new System.Drawing.Size(129, 21);
+            this.ip.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(40, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 12);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "数据库:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(40, 73);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(47, 12);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "表  名:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(40, 110);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 12);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "用户名:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(40, 149);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 12);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "密  码:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(40, 192);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(41, 12);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "I   P:";
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(324, 305);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ip);
+            this.Controls.Add(this.password);
+            this.Controls.Add(this.u_name);
+            this.Controls.Add(this.t_name);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ser_name);
+            this.Name = "Form1";
+            this.Text = "文件转移";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.TextBox ser_name;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox t_name;
+        private System.Windows.Forms.TextBox u_name;
+        private System.Windows.Forms.TextBox password;
+        private System.Windows.Forms.TextBox ip;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }
 

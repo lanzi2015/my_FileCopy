@@ -6,7 +6,8 @@ namespace WindowsFormsApp1
 {
     class PublicValue
     {
-        public static String FileName, FilePath1,FilePath2, FileBz,FileRPath;
+        public static String FileName, FilePath1,FilePath2, FileRPath;
+        public static int FileBz;
         public static string[] str = new string[5];
 
     }

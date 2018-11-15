@@ -32,46 +32,88 @@ namespace WindowsFormsApp1
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+             int [] F_fail = new int [PublicValue.FileBz];
+            int i = 0;
             OracleConnection conn = OracleConn(PublicValue.str);
             //创建错误日志
             if (!File.Exists(PublicValue.FileRPath + "\\错误转化日志.txt"))
                 File.Create(PublicValue.FileRPath + "\\错误转化日志.txt").Close();
             StreamWriter sw = new StreamWriter(PublicValue.FileRPath + "\\错误转化日志.txt", true);
             try
-            {   conn.Open();
-             //连接数据库
-             String s_sql = @"select * from " + PublicValue.str[1];
-             OracleCommand command = new OracleCommand(s_sql, conn);
-             OracleDataReader reader = command.ExecuteReader();
+            {
+                conn.Open();
+                //连接数据库
+                String s_sql = @"select * from " + PublicValue.str[1];
+                OracleCommand command = new OracleCommand(s_sql, conn);
+                OracleDataReader reader = command.ExecuteReader();
                 //当读取到列时,给文件路径和文件名称赋值
                 while (reader.Read())
                 {
                     PublicValue.FileName = reader.GetValue(2).ToString();
-                    PublicValue.FilePath2 =PublicValue.FileRPath+"\\"+ reader.GetValue(4).ToString();
+                    PublicValue.FilePath2 = PublicValue.FileRPath + "\\" + reader.GetValue(4).ToString();
                     PublicValue.FilePath1 = reader.GetValue(3).ToString().Replace("/", "\\");
-                    //如果原文件不存在
+                    //如果原文件不存在 
+                    MessageBox.Show(PublicValue.FileName);
                     if (!File.Exists(PublicValue.FilePath1))
                     {
-                        sw.Write(System.DateTime.Now + ":" + PublicValue.FilePath1 + "不存在\r\n");
+                        sw.Write(System.DateTime.Now +PublicValue.FilePath1 + "不存在。\r\n");
+                        int.TryParse(reader.GetValue(0).ToString(), out F_fail[i]);  i++;
                     }
+
                     else
                     {
+                        //判断文件名是否正确
+                        if (string.IsNullOrEmpty(PublicValue.FileName))
+                        {
+                            sw.Write(System.DateTime.Now+"XH为：" + reader.GetValue(0) + "的WJM为空。\r\n");
+                            int.TryParse(reader.GetValue(0).ToString(), out F_fail[i]);
+                            i++;
+                        }
                         //创建拷贝路径，拷贝文件
-                        Directory.CreateDirectory(PublicValue.FilePath2);
-                        File.Copy(PublicValue.FilePath1, PublicValue.FilePath2 + "\\" +PublicValue.FileName);
+                        else {
+                            Directory.CreateDirectory(PublicValue.FilePath2);
+                            File.Copy(PublicValue.FilePath1, PublicValue.FilePath2 + "\\" + PublicValue.FileName, true);
+                        }
                     }
                 }
+                //共有m个未迁移
+                int m = i;
+                //结束读取，关闭和数据的连接
                 sw.Close();
+                reader.Close();
                 conn.Close();
-                
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message,"导入失败");
-                sw.Close();
-                conn.Close();
-            }
+                //开始向数据库标记未导出行
+                OracleConnection conn1 = OracleConn(PublicValue.str);
+                try
+                {
+                    conn1.Open();
+                    String s_sql1 = "";
+                    for (i = 0; i < m; i++)
+                    {
+                        s_sql1 += "Update " + PublicValue.str[1] + " SET JJBH = 1 WHERE XH = " + F_fail[i] +  ";";
+                    }
+                    OracleCommand command1 = new OracleCommand(s_sql1, conn1);
+                    int temp = command1.ExecuteNonQuery();
+                    conn1.Close();
+                    MessageBox.Show("共有" + PublicValue.FileBz + "个文件，其中" + temp + "个未成功导入");
+                }
+                catch(Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "更新状态失败");
+                    conn1.Close();
+                }
 
-        }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "导入失败");
+                sw.Close();
+                conn.Close();
+            }
+}
+           
+
+        
         /*Oracle数据库连接
          * PublicValue.str[0] = this.ser_name.Text;
          * PublicValue.str[1] = this.t_name.Text;
@@ -113,8 +155,25 @@ namespace WindowsFormsApp1
             PublicValue.str[2] = this.u_name.Text;
             PublicValue.str[3] = this.password.Text;
             PublicValue.str[4] = this.ip.Text;
+            //统计有多少行
+            Table_Count();
             //转到后台运行
             backgroundWorker1.RunWorkerAsync();
+        }
+        //查询数据库的行数
+        public void  Table_Count()
+        {
+            OracleConnection conn1 = OracleConn(PublicValue.str);
+            conn1.Open();
+            String s_sql1 = @"select count(*) from " + PublicValue.str[1];
+            OracleCommand command = new OracleCommand(s_sql1, conn1);
+            OracleDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                int.TryParse(reader.GetValue(0).ToString(),out PublicValue.FileBz);
+            }
+            reader.Close();
+            conn1.Close();
         }
 
     }

@@ -40,6 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // ser_name
@@ -57,6 +58,7 @@
             this.button1.TabIndex = 1;
             this.button1.Text = "样例";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -66,6 +68,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "连接数据源";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // t_name
             // 
@@ -87,6 +90,7 @@
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(129, 21);
             this.password.TabIndex = 5;
+            this.password.UseSystemPasswordChar = true;
             // 
             // ip
             // 
@@ -103,7 +107,6 @@
             this.label1.Size = new System.Drawing.Size(47, 12);
             this.label1.TabIndex = 7;
             this.label1.Text = "数据库:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -179,6 +182,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

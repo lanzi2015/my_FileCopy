@@ -53,7 +53,6 @@ namespace WindowsFormsApp1
                     PublicValue.FilePath2 = PublicValue.FileRPath + "\\" + reader.GetValue(4).ToString();
                     PublicValue.FilePath1 = reader.GetValue(3).ToString().Replace("/", "\\");
                     //如果原文件不存在 
-                    MessageBox.Show(PublicValue.FileName);
                     if (!File.Exists(PublicValue.FilePath1))
                     {
                         sw.Write(System.DateTime.Now +PublicValue.FilePath1 + "不存在。\r\n");
@@ -88,14 +87,15 @@ namespace WindowsFormsApp1
                 {
                     conn1.Open();
                     String s_sql1 = "";
-                    for (i = 0; i < m; i++)
+                    for (i = 0; i <m; i++)
                     {
-                        s_sql1 += "Update " + PublicValue.str[1] + " SET JJBH = 1 WHERE XH = " + F_fail[i] +  ";";
+                        s_sql1 = @"Update " + PublicValue.str[1] + " SET JJBH =1 WHERE XH = " + F_fail[i];
+                        OracleCommand command1 = new OracleCommand(s_sql1, conn1);
+                        command1.ExecuteNonQuery();
                     }
-                    OracleCommand command1 = new OracleCommand(s_sql1, conn1);
-                    int temp = command1.ExecuteNonQuery();
+                    
                     conn1.Close();
-                    MessageBox.Show("共有" + PublicValue.FileBz + "个文件，其中" + temp + "个未成功导入");
+                    MessageBox.Show("共有" + PublicValue.FileBz + "个文件，其中" + m + "个未成功导入");
                 }
                 catch(Exception exception)
                 {
@@ -165,8 +165,8 @@ namespace WindowsFormsApp1
         {
             OracleConnection conn1 = OracleConn(PublicValue.str);
             conn1.Open();
-            String s_sql1 = @"select count(*) from " + PublicValue.str[1];
-            OracleCommand command = new OracleCommand(s_sql1, conn1);
+            String s_sql2 = @"select count(*) from " + PublicValue.str[1];
+            OracleCommand command = new OracleCommand(s_sql2, conn1);
             OracleDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {

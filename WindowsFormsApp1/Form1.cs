@@ -25,6 +25,7 @@ namespace WindowsFormsApp1
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             MessageBox.Show("导入完成");
+            this.Visible=true;
         }
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -36,14 +37,14 @@ namespace WindowsFormsApp1
             int i = 0;
             OracleConnection conn = OracleConn(PublicValue.str);
             //创建错误日志
-            if (!File.Exists(PublicValue.FileRPath + "\\错误转化日志.txt"))
-                File.Create(PublicValue.FileRPath + "\\错误转化日志.txt").Close();
-            StreamWriter sw = new StreamWriter(PublicValue.FileRPath + "\\错误转化日志.txt", true);
+            //if (!File.Exists(PublicValue.FileRPath + "\\错误转化日志.txt"))
+            //    File.Create(PublicValue.FileRPath + "\\错误转化日志.txt").Close();
+            //StreamWriter sw = new StreamWriter(PublicValue.FileRPath + "\\错误转化日志.txt", true);
             try
             {
                 conn.Open();
                 //连接数据库
-                String s_sql = @"select * from " + PublicValue.str[1];
+                String s_sql = @"select * from " + PublicValue.str[1]+" WHERE ZT = 0";
                 OracleCommand command = new OracleCommand(s_sql, conn);
                 OracleDataReader reader = command.ExecuteReader();
                 //当读取到列时,给文件路径和文件名称赋值
@@ -55,16 +56,15 @@ namespace WindowsFormsApp1
                     //如果原文件不存在 
                     if (!File.Exists(PublicValue.FilePath1))
                     {
-                        sw.Write(System.DateTime.Now +PublicValue.FilePath1 + "不存在。\r\n");
+                        //sw.Write(System.DateTime.Now +PublicValue.FilePath1 + "不存在。\r\n");
                         int.TryParse(reader.GetValue(0).ToString(), out F_fail[i]);  i++;
                     }
-
                     else
                     {
                         //判断文件名是否正确
                         if (string.IsNullOrEmpty(PublicValue.FileName))
                         {
-                            sw.Write(System.DateTime.Now+"XH为：" + reader.GetValue(0) + "的WJM为空。\r\n");
+                            //sw.Write(System.DateTime.Now+"XH为：" + reader.GetValue(0) + "的WJM为空。\r\n");
                             int.TryParse(reader.GetValue(0).ToString(), out F_fail[i]);
                             i++;
                         }
@@ -78,20 +78,21 @@ namespace WindowsFormsApp1
                 //共有m个未迁移
                 int m = i;
                 //结束读取，关闭和数据的连接
-                sw.Close();
-                reader.Close();
+                //sw.Close();
                 conn.Close();
+                
                 //开始向数据库标记未导出行
                 OracleConnection conn1 = OracleConn(PublicValue.str);
                 try
                 {
                     conn1.Open();
-                    String s_sql1 = "";
+                    string s_sql1 = "";
                     for (i = 0; i <m; i++)
                     {
-                        s_sql1 = @"Update " + PublicValue.str[1] + " SET JJBH =1 WHERE XH = " + F_fail[i];
+                        s_sql1 = @"Update " + PublicValue.str[1] + " SET ZT =1 WHERE XH = " + F_fail[i];
                         OracleCommand command1 = new OracleCommand(s_sql1, conn1);
-                        command1.ExecuteNonQuery();
+                        int count = command1.ExecuteNonQuery();
+                       
                     }
                     
                     conn1.Close();
@@ -107,7 +108,7 @@ namespace WindowsFormsApp1
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "导入失败");
-                sw.Close();
+                //sw.Close();
                 conn.Close();
             }
 }
@@ -157,6 +158,8 @@ namespace WindowsFormsApp1
             PublicValue.str[4] = this.ip.Text;
             //统计有多少行
             Table_Count();
+            MessageBox.Show("开始后台运行");
+            this.Visible = false;
             //转到后台运行
             backgroundWorker1.RunWorkerAsync();
         }
@@ -165,7 +168,7 @@ namespace WindowsFormsApp1
         {
             OracleConnection conn1 = OracleConn(PublicValue.str);
             conn1.Open();
-            String s_sql2 = @"select count(*) from " + PublicValue.str[1];
+            String s_sql2 = @"select count(*) from " + PublicValue.str[1]+" WHERE ZT=0";
             OracleCommand command = new OracleCommand(s_sql2, conn1);
             OracleDataReader reader = command.ExecuteReader();
             while (reader.Read())
